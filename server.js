@@ -17,7 +17,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://192.168.1.104:8081',
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
