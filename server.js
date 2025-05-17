@@ -9,15 +9,12 @@ const { errorHandler } = require('./middleware/errorMiddleware');
 // Load environment variables
 dotenv.config();
 
-// Connect to database
-connectDB();
-
 // Initialize Express
 const app = express();
 
 // Middleware
 app.use(cors({
-    origin: "*",
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -27,6 +24,16 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+// Connect to database before handling requests
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 // Routes
 app.use('/api/income', require('./routes/incomeRoutes'));
